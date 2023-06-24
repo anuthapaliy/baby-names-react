@@ -1,26 +1,39 @@
 // import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
-import React from "react";
+
 import babyNamesData from "./babyNamesData.json";
 
 const App = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const sortedNames = [...babyNamesData].sort((a,b)=>a.name.localeCompare(b.name));
   const boysNames = sortedNames.filter((name)=> name.sex === "m");
 const girlsName = sortedNames.filter((name) => name.sex === "f");
+
+const handleSearchInputChange = (event) => {
+  setSearchQuery(event.target.value);
+};
+const filteredBoysNames = boysNames.filter((name)=>
+name.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
+const filteredGirlsNames = girlsName.filter((name)=> 
+name.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
   return (
     <div>
     <h1>Sorted Names:</h1>
-
+<input type="text" id="searchInput" placeholders="Search baby names..."
+onChange={handleSearchInputChange} />
     <h2>Boy's Names:</h2>
     <ul>
-      {boysNames.map((name)=> (
+      {filteredBoysNames.map((name)=> (
         <li key={name.id} style={{color: "skyblue"}}>{name.name}</li>
       ))}
     </ul>
 
     <h2>Girl's Names:</h2>
     <ul>
-      {girlsName.map((name) => (
+      {filteredGirlsNames.map((name) => (
         <li key={name.id} style={{ color: "pink"}}>{name.name}</li>
 
       ))}
